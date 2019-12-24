@@ -70,6 +70,8 @@ void VectorDelete(vector *v, int position) {
 }
 
 void VectorSort(vector *v, VectorCompareFunction compare) {
+  assert(compare != NULL);
+  qsort(v->elems, v->log_length, v->elem_size, compare );
 }
 
 void VectorMap(vector *v, VectorMapFunction mapFn, void *auxData) {
@@ -80,5 +82,27 @@ void VectorMap(vector *v, VectorMapFunction mapFn, void *auxData) {
 }
 
 static const int kNotFound = -1;
-int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchFn, int startIndex, bool isSorted)
-{ return -1; } 
+// returns the integer position of the matching element.  Otherwise, returns -1.
+int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchFn, int startIndex, bool isSorted) { 
+
+  assert(startIndex >= 0);
+  assert(startIndex <= v->log_length);
+  assert(key != NULL);
+  assert(searchFn != NULL);
+
+  char *found_addr;
+  if (isSorted) {
+    found_addr = bsearch(key, v->elems, v->log_length, v->elem_size, searchFn);
+    if (found_addr == NULL) return kNotFound;
+  }
+  else {
+    // incrementing pointers here to avoid a multiplication (by elem_size) each iteration; 
+    char* end_address = (char*)v->elems + v->log_length * v->elem_size;
+    for( found_addr = (char*)v->elems + startIndex * v->elem_size ; found_addr < end_address; found_addr += v->elem_size) {
+      if (searchFn(key, found_addr) == 0) break;
+    }
+    if (found_addr >= end_address) return kNotFound;
+  }
+
+  return (found_addr - (char*)v->elems)/v->elem_size; 
+} 

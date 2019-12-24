@@ -78,9 +78,9 @@ static void TestSearch(vector *v, char ch)
   
   foundSorted = VectorSearch(v, &ch, CompareChar, 0, true); // Test sorted 
   foundNot = VectorSearch(v, &ch, CompareChar, 0, false);   // Not sorted 
-  fprintf(stdout,"\nFound '%c' in sorted array? %s. How about unsorted? %s.", 
-	  ch, YES_OR_NO((foundSorted != -1)), 
-	  YES_OR_NO((foundNot != -1)));
+  fprintf(stdout,"\nFound '%c' in sorted array? %s. At %d. How about unsorted? %s. at %d.", 
+	  ch, YES_OR_NO((foundSorted != -1)), foundSorted, 
+	  YES_OR_NO((foundNot != -1)), foundNot );
 }
 
 /**
@@ -194,7 +194,7 @@ static void SimpleTest()
   vector alphabet;
   VectorNew(&alphabet, sizeof(char), NULL, 4);
   TestAppend(&alphabet);
-  //TestSortSearch(&alphabet);
+  TestSortSearch(&alphabet);
   TestAt(&alphabet);
   //TestInsertDelete(&alphabet);
   //TestReplace(&alphabet);
