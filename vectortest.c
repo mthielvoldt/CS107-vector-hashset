@@ -194,10 +194,10 @@ static void SimpleTest()
   vector alphabet;
   VectorNew(&alphabet, sizeof(char), NULL, 4);
   TestAppend(&alphabet);
-  TestSortSearch(&alphabet);
+  //TestSortSearch(&alphabet);
   TestAt(&alphabet);
-  TestInsertDelete(&alphabet);
-  TestReplace(&alphabet);
+  //TestInsertDelete(&alphabet);
+  //TestReplace(&alphabet);
   VectorDispose(&alphabet);
 }
 
@@ -404,8 +404,8 @@ static void MemoryTest()
 int main(int ignored, char **alsoIgnored) 
 {
   SimpleTest();
-  ChallengingTest();
-  MemoryTest();
+  //ChallengingTest();
+  //MemoryTest();
   return 0;
 }
 
