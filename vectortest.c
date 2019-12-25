@@ -62,7 +62,6 @@ static void TestAppend(vector *alphabet)
   VectorMap(alphabet, PrintChar, stdout);
 }
 
-
 /**
  * Function: TestSearch
  * --------------------
@@ -197,7 +196,7 @@ static void SimpleTest()
   TestSortSearch(&alphabet);
   TestAt(&alphabet);
   //TestInsertDelete(&alphabet);
-  //TestReplace(&alphabet);
+  TestReplace(&alphabet);
   VectorDispose(&alphabet);
 }
 
@@ -406,6 +405,7 @@ int main(int ignored, char **alsoIgnored)
   SimpleTest();
   //ChallengingTest();
   //MemoryTest();
+  fprintf(stdout, "\n");
   return 0;
 }
 

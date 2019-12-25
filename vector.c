@@ -40,10 +40,33 @@ void *VectorNth(const vector *v, int position) {
   return (char*)v->elems + position * v->elem_size; 
 }
 
+// **** Need to Test this ****
 void VectorReplace(vector *v, const void *elemAddr, int position) {
+  assert(position >= 0);
+  assert(position < v->log_length);
+  assert(elemAddr != NULL);
+
+  void *target = (char*)v->elems + position * v->elem_size;
+  // if a Free Function has been provided to de-allocate elements, us it before we torch this one. 
+  if (v->FreeFunction != NULL)
+    v->FreeFunction(target);
+
+  memcpy(target, elemAddr, v->elem_size);
+  
 }
 
+//  NEXT
 void VectorInsert(vector *v, const void *elemAddr, int position) {
+  // first, check if we're out of space
+
+  // Grow if necessary
+
+  // memmov
+
+  // replace at position. 
+
+
+
 }
 
 static void VectorGrow(vector *v) {
@@ -66,7 +89,9 @@ void VectorAppend(vector *v, const void *elemAddr) {
   v->log_length++;
 }
 
+// Also Next
 void VectorDelete(vector *v, int position) {
+
 }
 
 void VectorSort(vector *v, VectorCompareFunction compare) {
@@ -103,6 +128,6 @@ int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchF
     }
     if (found_addr >= end_address) return kNotFound;
   }
-
+  // We still need to compute the integer position from the address. 
   return (found_addr - (char*)v->elems)/v->elem_size; 
 } 
