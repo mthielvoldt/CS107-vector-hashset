@@ -195,7 +195,7 @@ static void SimpleTest()
   TestAppend(&alphabet);
   TestSortSearch(&alphabet);
   TestAt(&alphabet);
-  //TestInsertDelete(&alphabet);
+  TestInsertDelete(&alphabet);
   TestReplace(&alphabet);
   VectorDispose(&alphabet);
 }
@@ -383,6 +383,7 @@ static void MemoryTest()
   for (i = 0; i < kNumQuestionWords; i++) {
     questionWord = malloc(strlen(kQuestionWords[i]) + 1);
     strcpy(questionWord, kQuestionWords[i]);
+    printf("%s%s", questionWord, "\n");
     VectorInsert(&questionWords, &questionWord, 0);  // why the ampersand? isn't questionWord already a pointer?
   }
   
@@ -403,8 +404,8 @@ static void MemoryTest()
 int main(int ignored, char **alsoIgnored) 
 {
   SimpleTest();
-  //ChallengingTest();
-  //MemoryTest();
+  ChallengingTest();
+  MemoryTest();
   fprintf(stdout, "\n");
   return 0;
 }

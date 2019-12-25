@@ -40,7 +40,6 @@ void *VectorNth(const vector *v, int position) {
   return (char*)v->elems + position * v->elem_size; 
 }
 
-// **** Need to Test this ****
 void VectorReplace(vector *v, const void *elemAddr, int position) {
   assert(position >= 0);
   assert(position < v->log_length);
@@ -55,20 +54,6 @@ void VectorReplace(vector *v, const void *elemAddr, int position) {
   
 }
 
-//  NEXT
-void VectorInsert(vector *v, const void *elemAddr, int position) {
-  // first, check if we're out of space
-
-  // Grow if necessary
-
-  // memmov
-
-  // replace at position. 
-
-
-
-}
-
 static void VectorGrow(vector *v) {
   //attempt to reallocate 
   int new_alloc_length = v->alloc_length + v->grow_length;
@@ -80,6 +65,29 @@ static void VectorGrow(vector *v) {
   v->elems = new_elems;
 }
 
+//  To Test
+void VectorInsert(vector *v, const void *elemAddr, int position) {
+  // asserts 
+  assert(position >= 0);
+  assert(position <= v->log_length);
+  assert( elemAddr != NULL);
+
+  // first, grow if we need to
+  if ( v->log_length == v->alloc_length) VectorGrow(v);
+
+  // shift all elements from <position> to the end of the vector one elem_size
+  // towards the end of the vector to make room for new element at <position>.
+  void* src_addr = (char*)v->elems + position * v->elem_size;
+  void* dest_addr = (char*)src_addr + v->elem_size;
+  int n_bytes_to_move = (v->log_length - position) * v->elem_size;
+  memmove( dest_addr, src_addr, n_bytes_to_move );
+  v->log_length++;
+
+  // write the new data at <position> 
+  VectorReplace(v, elemAddr, position);
+
+}
+
 void VectorAppend(vector *v, const void *elemAddr) {
   // check if we need to grow, and do it if we need to. 
   if (v->log_length == v->alloc_length) VectorGrow(v);
@@ -89,9 +97,27 @@ void VectorAppend(vector *v, const void *elemAddr) {
   v->log_length++;
 }
 
-// Also Next
+// to test
 void VectorDelete(vector *v, int position) {
+  assert(position >= 0);
+  assert(position < v->log_length);
+  
+  // calculate the address of the to-be-deleted element. 
+  void* dest_addr = (char*)v->elems + position * v->elem_size;
 
+  // call the free function on the to-be-deleted element. 
+  if (v->FreeFunction != NULL)
+    v->FreeFunction(dest_addr);
+  
+  // shift all elements to the right of <position> to the left by one space.
+  int n_bytes_to_move = (v->log_length - position - 1) * v->elem_size;
+  
+  if (n_bytes_to_move > 0 ) { // we don't need to call memmove if we're deleting the last element. 
+    void* src_addr = (char*)dest_addr + v->elem_size;
+    memmove( dest_addr, src_addr, n_bytes_to_move );
+  }    
+  
+  v->log_length--; 
 }
 
 void VectorSort(vector *v, VectorCompareFunction compare) {
