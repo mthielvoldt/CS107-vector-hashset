@@ -83,9 +83,12 @@ void VectorInsert(vector *v, const void *elemAddr, int position) {
   memmove( dest_addr, src_addr, n_bytes_to_move );
   v->log_length++;
 
-  // write the new data at <position> 
-  VectorReplace(v, elemAddr, position);
-
+  // write the new data at <position>.  
+  // We can't use VectorReplace here because that would call FreeFunction on the element 
+  // that's currently still at <position>, which is now also just to the right of <position>
+  // We need to just memcpy the new data in. 
+  void *target = (char*)v->elems + position * v->elem_size;
+  memcpy(target, elemAddr, v->elem_size);
 }
 
 void VectorAppend(vector *v, const void *elemAddr) {

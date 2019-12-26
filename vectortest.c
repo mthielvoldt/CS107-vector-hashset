@@ -349,7 +349,7 @@ static void PrintString(void *elemAddr, void *auxData)
 {
   char *word = *(char **)elemAddr;
   FILE *fp = (FILE *) auxData;
-  fprintf(fp, "\t%s\n", word);
+  fprintf(fp, "*%s*\n", word);
 }
 
 /**
@@ -383,14 +383,36 @@ static void MemoryTest()
   for (i = 0; i < kNumQuestionWords; i++) {
     questionWord = malloc(strlen(kQuestionWords[i]) + 1);
     strcpy(questionWord, kQuestionWords[i]);
-    printf("%s%s", questionWord, "\n");
+    printf("Just Added: %s%s", questionWord, "\n");
     VectorInsert(&questionWords, &questionWord, 0);  // why the ampersand? isn't questionWord already a pointer?
   }
-  
+  //printf("***\n%s*\t*%s*\t*%s*\t*%s*\t*%s*\n", 
+  //  *(char**)VectorNth(&questionWords, 0), 
+  //  *((char**)questionWords.elems +1), 
+  //  *((char**)questionWords.elems +2), 
+  //  *((char**)questionWords.elems +3), 
+  //  *((char**)questionWords.elems +4 ));
   fprintf(stdout, "Mapping over the char * vector (ask yourself: why are char **'s passed to PrintString?!!)\n");
   VectorMap(&questionWords, PrintString, stdout);
   fprintf(stdout, "Finally, destroying the char * vector.\n");
   VectorDispose(&questionWords);
+}
+
+static void TestInsert(){
+  int i;
+  const char alphabet[] = "abcdef";
+  vector v;
+  const int n_letters = sizeof(alphabet) / sizeof(alphabet[0]);
+
+  VectorNew(&v, sizeof(char), NULL, 3);
+
+  for (i = 0; i < n_letters; i++)
+  {
+    VectorInsert(&v, &alphabet[i], 0 );
+    VectorMap(&v, PrintChar, stdout);
+    printf("\n");
+  }
+  
 }
 
 /**
@@ -405,6 +427,7 @@ int main(int ignored, char **alsoIgnored)
 {
   SimpleTest();
   ChallengingTest();
+  TestInsert();
   MemoryTest();
   fprintf(stdout, "\n");
   return 0;
