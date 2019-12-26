@@ -247,7 +247,7 @@ void VectorDelete(vector *v, int position);
  * comparator or the key is NULL.
  */  
 
-int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchfn, int startIndex, bool isSorted);
+int VectorSearch(const vector *v, const void *key, VectorCompareFunction compareFn, int startIndex, bool isSorted);
 
 /**
  * Function: VectorSort

@@ -103,7 +103,7 @@ static void BuildTableOfLetterCounts(hashset *counts)
       // See if we already have an entry for this char		
       found = (struct frequency *) HashSetLookup(counts, &localFreq);	
       if (found != NULL) 		// increment if already there 
-	localFreq.occurrences = found->occurrences + 1;
+        localFreq.occurrences = found->occurrences + 1;
       HashSetEnter(counts, &localFreq); // enter should overwrite if needed
     }
   }
@@ -149,6 +149,7 @@ static void TestHashTable(void)
   fprintf(stdout, "Here is the unordered contents of the table:\n");
   HashSetMap(&counts, PrintFrequency, stdout);  // print contents of table
   
+  
   VectorNew(&sortedCounts, sizeof(struct frequency), NULL, 0);
   HashSetMap(&counts, AddFrequency, &sortedCounts);   // add all freq to array
   VectorSort(&sortedCounts, CompareLetter);      // sort by char
@@ -160,6 +161,7 @@ static void TestHashTable(void)
   VectorMap(&sortedCounts, PrintFrequency, stdout);	// print out array 
   
   VectorDispose(&sortedCounts);				// free all storage 
+  
   HashSetDispose(&counts);
 }
 
